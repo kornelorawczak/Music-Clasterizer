@@ -1,0 +1,12 @@
+name: audio_env
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - libvorbis
+  - librosa
+  - libsndfile
+  - pysoundfile
+  - ipykernel
+  - conda_subprocess
+prefix: /Users/kornelorawczak/miniconda3/envs/audio_env

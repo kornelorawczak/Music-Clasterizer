@@ -1,0 +1,69 @@
+# ========================
+# Python
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# ========================
+# Conda
+# ========================
+.envs/
+*.conda
+conda-meta/
+miniconda3/
+anaconda3/
+audio_env/
+
+# ========================
+# Jupyter
+# ========================
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+
+# ========================
+# Logs / caches
+# ========================
+logs/
+*.log
+.cache/
+
+# ========================
+# OS
+# ========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ========================
+# IDEs / Editors
+# ========================
+.vscode/
+.idea/
+*.swp
+
+# ========================
+# Build / packaging
+# ========================
+build/
+dist/
+*.egg-info/
+
+# ========================
+# Misc
+# ========================
+.env.local
+.env.*.local
