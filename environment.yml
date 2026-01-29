@@ -10,3 +10,5 @@ dependencies:
   - pysoundfile
   - ipykernel
   - conda_subprocess
+  - yt-dlp
+  - os
