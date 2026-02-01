@@ -79,3 +79,9 @@ data/*
 # ========================
 urls/*
 !urls/.gitkeep
+
+# ========================
+# Datasets
+# ========================
+datasets/*
+!datasets/.gitkeep

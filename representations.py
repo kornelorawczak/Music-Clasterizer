@@ -8,59 +8,6 @@ import scipy.fftpack
 import librosa
 
 
-def load_audio(file_path, sr=22050):
-    command = [
-        'ffmpeg',
-        '-i', file_path,        # Plik wejściowy
-        '-f', 'f32le',          # Format wyjściowy: float 32-bit 
-        '-ac', '1',             # Audio Channels: 1 (Mono) 
-        '-ar', str(sr),         # Audio Rate: docelowe próbkowanie
-        '-acodec', 'pcm_f32le', # Kodek PCM
-        '-'                     # Wyjście na standardowe wyjście (pipe) zamiast do pliku
-    ]
-
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=10**8)
-    stdout_data, _ = process.communicate()
-
-    # Zamieniamy surowe bajty na tablicę numpy
-    audio_array = np.frombuffer(stdout_data, dtype=np.float32)
-    
-    return audio_array
-
-
-def preprocess_dataset(input_folder, output_file, target_sr=22050):
-    files = glob.glob(os.path.join(input_folder, "*.mp3"))
-    dataset = {}
-
-    for i, path in enumerate(files):
-        filename = os.path.basename(path)
-        try:
-            audio_data = load_audio(path, sr=target_sr)
-            dataset[filename] = audio_data            
-        except Exception as e:
-            print(f"Błąd przy pliku {filename}: {e}")
-
-    with open(output_file, 'wb') as f:
-        pickle.dump(dataset, f)
-
-def preprocess_dataset_album_name(input_folder, output_file, target_sr=22050, album_name=None):
-    files = glob.glob(os.path.join(input_folder, "*.mp3"))
-    dataset = {}
-
-    for i, path in enumerate(files):
-        filename = os.path.basename(path)
-        try:
-            audio_data = load_audio(path, sr=target_sr)
-            dataset[filename] = {
-                "audio": audio_data,
-                "album": album_name  
-            }           
-        except Exception as e:
-            print(f"Błąd przy pliku {filename}: {e}")
-
-    with open(output_file, 'wb') as f:
-        pickle.dump(dataset, f)
-
 def pre_emphasis(signal, alpha=0.97):
     return np.append(signal[0], signal[1:] - alpha * signal[:-1])
 
