@@ -344,20 +344,29 @@ def create_feature_dataset(input_pickle_path):
     
     X = []
     filenames = []
+    albums = []
         
-    for filename, audio in tqdm(raw_dataset.items()):
+    for filename, item in tqdm(raw_dataset.items()):
         try:
-            features = song_to_representation(audio)
-            
+            if isinstance(item, dict):
+                audio_data = item['audio']
+                album_name = item.get('album', 'Unknown')
+                if album_name is None:
+                    album_name = 'Unknown'
+            else:
+                audio_data = item
+                album_name = 'Unknown'
+
+            features = song_to_representation(audio_data)
             # Sprawdzenie czy nie ma NaN lub Inf (częste przy logarytmach/dzieleniu przez 0)
             if np.isnan(features).any() or np.isinf(features).any():
                 features = np.nan_to_num(features)
                 
             X.append(features)
             filenames.append(filename)
-            
+            albums.append(album_name) 
         except Exception as e:
             print(f"Błąd przetwarzania {filename}: {e}")
             
-    return np.array(X), filenames
+    return np.array(X), filenames, albums
 
