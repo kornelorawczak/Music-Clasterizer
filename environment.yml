@@ -11,4 +11,3 @@ dependencies:
   - ipykernel
   - conda_subprocess
   - yt-dlp
-  - os
