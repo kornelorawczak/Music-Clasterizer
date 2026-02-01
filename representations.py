@@ -43,6 +43,24 @@ def preprocess_dataset(input_folder, output_file, target_sr=22050):
     with open(output_file, 'wb') as f:
         pickle.dump(dataset, f)
 
+def preprocess_dataset_album_name(input_folder, output_file, target_sr=22050, album_name=None):
+    files = glob.glob(os.path.join(input_folder, "*.mp3"))
+    dataset = {}
+
+    for i, path in enumerate(files):
+        filename = os.path.basename(path)
+        try:
+            audio_data = load_audio(path, sr=target_sr)
+            dataset[filename] = {
+                "audio": audio_data,
+                "album": album_name  
+            }           
+        except Exception as e:
+            print(f"Błąd przy pliku {filename}: {e}")
+
+    with open(output_file, 'wb') as f:
+        pickle.dump(dataset, f)
+
 def pre_emphasis(signal, alpha=0.97):
     return np.append(signal[0], signal[1:] - alpha * signal[:-1])
 

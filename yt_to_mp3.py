@@ -1,13 +1,16 @@
 import yt_dlp
 import os
 
-
 def download_mp3(file: str, out_path: str):
-    os.makedirs(out_path, exist_ok=True)
+    abs_out_path = os.path.abspath(out_path)
+    os.makedirs(abs_out_path, exist_ok=True)
 
     ydl_opts = {
         "format": "bestaudio/best",
-        "outtmpl": f"{out_path}/%(title)s.%(ext)s",
+        "paths": {
+            "home": abs_out_path  
+        },
+        "outtmpl": "%(title)s.%(ext)s",        
         "postprocessors": [{
             "key": "FFmpegExtractAudio",
             "preferredcodec": "mp3",
@@ -21,6 +24,7 @@ def download_mp3(file: str, out_path: str):
         "noplaylist": True,
         "ignoreerrors": True,
         "quiet": False,
+        "keepvideo": False, 
     }
 
     with open(file) as f:
@@ -30,6 +34,3 @@ def download_mp3(file: str, out_path: str):
         ydl.download(urls)
 
     print("All mp3 downloaded")
-
-
-download_mp3("urls.txt", "./data")
