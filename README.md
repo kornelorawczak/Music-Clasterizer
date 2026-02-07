@@ -12,7 +12,8 @@ python -m ipykernel install --user --name audio_env --display-name "Python (audi
 Dodawanie bibliotek do naszego środowiska odbywa się poprzez dodawanie ich po myślniku do pliku environment.yml
 Następnie aby zaktualizować to środowisko u siebie lokalnie, wystarczy użyć komendy w terminalu:
 ```bash
-conda env update -n audio_env --file environment.yml
+conda activate audio_env
+conda env export --from-history > environment.yml
 ```
 
 ## Dodawanie piosenek do datasetu

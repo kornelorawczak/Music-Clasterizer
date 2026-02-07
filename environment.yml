@@ -1,6 +1,5 @@
 name: audio_env
 channels:
-  - conda-forge
   - defaults
 dependencies:
   - python=3.11
@@ -11,3 +10,7 @@ dependencies:
   - ipykernel
   - conda_subprocess
   - yt-dlp
+  - altair
+  - pandas
+  - umap-learn
+prefix: /Users/kornelorawczak/miniconda3/envs/audio_env
