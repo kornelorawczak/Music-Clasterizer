@@ -333,8 +333,40 @@ def song_to_representation(audio_data, sr=22050):
     # Konwersja na tablicę numpy float32 (lepsza dla ML)
     return np.array(feature_vector, dtype=np.float32)
 
+def librosa_song_to_representation(audio_data, sr=22050):
+    features = []
+    
+    mfcc = librosa.feature.mfcc(y=audio_data, sr=sr, n_mfcc=13)
+    features.append(np.mean(mfcc, axis=1))  
+    features.append(np.var(mfcc, axis=1))   
 
-def create_feature_dataset(input_pickle_path):
+    spec_centroid = librosa.feature.spectral_centroid(y=audio_data, sr=sr)
+    features.append(np.mean(spec_centroid))
+    features.append(np.var(spec_centroid))
+    
+    spec_rolloff = librosa.feature.spectral_rolloff(y=audio_data, sr=sr)
+    features.append(np.mean(spec_rolloff))
+    features.append(np.var(spec_rolloff))
+    
+    zcr = librosa.feature.zero_crossing_rate(audio_data)
+    features.append(np.mean(zcr))
+    features.append(np.var(zcr))
+    
+    chroma_stft = librosa.feature.chroma_stft(y=audio_data, sr=sr)
+    features.append(np.mean(chroma_stft, axis=1))
+    features.append(np.var(chroma_stft, axis=1))
+    
+    try:
+        tempo, _ = librosa.beat.beat_track(y=audio_data, sr=sr)
+        if isinstance(tempo, np.ndarray):
+            tempo = tempo[0]
+        features.append([tempo]) 
+    except Exception:
+        features.append([0]) 
+
+    return np.hstack(features)
+
+def create_feature_dataset(input_pickle_path, librosa=False):
     """
     Wczytuje dataset audio (słownik), mieli go przez pipeline 
     i zwraca macierz X (cechy) oraz listę nazw plików (identyfikatory).
@@ -356,8 +388,11 @@ def create_feature_dataset(input_pickle_path):
             else:
                 audio_data = item
                 album_name = 'Unknown'
-
-            features = song_to_representation(audio_data)
+                
+            if librosa:
+                features = librosa_song_to_representation(audio_data)
+            else:
+                features = song_to_representation(audio_data)
             # Sprawdzenie czy nie ma NaN lub Inf (częste przy logarytmach/dzieleniu przez 0)
             if np.isnan(features).any() or np.isinf(features).any():
                 features = np.nan_to_num(features)
@@ -370,3 +405,4 @@ def create_feature_dataset(input_pickle_path):
             
     return np.array(X), filenames, albums
 
+                           
