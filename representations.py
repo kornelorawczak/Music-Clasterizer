@@ -6,7 +6,7 @@ import subprocess
 import time
 import scipy.fftpack
 import librosa
-
+from tqdm import tqdm
 
 def pre_emphasis(signal, alpha=0.97):
     return np.append(signal[0], signal[1:] - alpha * signal[:-1])
@@ -293,7 +293,6 @@ def estimate_bpm(magnitudes, sr=22050, hop_length=512, min_bpm=60, max_bpm=200):
     bpm = 60 / period_seconds
     return bpm
 
-from tqdm import tqdm
 
 def song_to_representation(audio_data, sr=22050):
     feature_vector = []
